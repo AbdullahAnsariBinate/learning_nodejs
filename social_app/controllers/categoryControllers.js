@@ -1,25 +1,7 @@
 const { json } = require("express");
 const Category = require("../modals/Category");
-const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("cloudinary").v2;
+const parser = require("../middleware/cloudinaryStorage");
 
-cloudinary.config({
-  cloud_name: "dqcppc6et",
-  api_key: "222887894591324",
-  api_secret: "vhGlJPcESZr5az53_OyQu0YTU4s",
-});
-
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "tesingFolder",
-    allowed_formats: ["jpeg", "jpg", "png"],
-  },
-});
-const parser = multer({
-  storage: storage,
-});
 const createCategory = async (req, res) => {
   try {
     parser.single("image")(req, res, async (err) => {

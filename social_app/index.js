@@ -10,6 +10,7 @@ const helmet = require("helmet");
 const authRouter = require("./routers/auth");
 const userRouter = require("./routers/users");
 const categoryRouter = require("./routers/category");
+const productRouter = require("./routers/product");
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(morgan("common"));
 app.use("/socialapp/api/users", userRouter);
 app.use("/socialapp/api/auth", authRouter);
 app.use("/socialapp/api/category", categoryRouter);
+app.use("/socialapp/api/product", productRouter);
 
 // app.get("/user", (req, res) => {
 //   res.send("Hello World!");
