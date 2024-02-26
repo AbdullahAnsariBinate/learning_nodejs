@@ -78,7 +78,6 @@ const getProduct = async (req, res) => {
 //     const updatedPrice = price;
 //     const updateImages = allImages;
 
-
 //     console.log(updatedTitle, updatedDescription, "jhhjdhdhdhdhhd");
 
 //     await Product.findOneAndUpdate(
@@ -99,48 +98,55 @@ const getProduct = async (req, res) => {
 //       .json({ message: "Product updated successfully!", statusCode: 200 });
 //   });
 // };
+
 const updateProduct = async (req, res) => {
-  console.log("🚀 ~ updateProduct ~ req:", req);
-  const { title, description, price, categoryId } = req.body;
-  const { id } = req.query;
+  try {
+    parser.array("image", 10)(req, res, async (err) => {
+      if (err) {
+        res
+          .status(400)
+          .json({ statusCode: false, message: "Images uploading failed!" });
+        return;
+      }
 
-  parser.array("image", 10)(req, res, async (err) => {
-    if (err) {
-      res.status(400).json({ statusCode: false, message: "Images uploading failed!" });
-      return;
-    }
+      let allImages = [];
+      let imgs = req.files;
+      imgs.forEach((item, index) => {
+        allImages.push(item?.path);
+      });
+      console.log("allImages", allImages);
+      const { title, description, price, categoryId } = req.body;
+      const { id } = req.query;
 
-    let allImages = [];
-    let imgs = req.files;
-    imgs.forEach((item, index) => {
-      allImages.push(item?.path);
-    });
-
-    try {
-      const updatedProduct = await Product.findOneAndUpdate(
+      await Product.findByIdAndUpdate(
         { _id: id },
         {
           $set: {
-            title: title,
-            description: description,
-            categoryId: categoryId,
-            price: price,
+            title,
+            description,
+            categoryId,
+            price,
             image: allImages,
           },
-        },
-        { new: true }
+        }
       );
 
-      if (!updatedProduct) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-
-      res.status(200).json({ message: "Product updated successfully!", statusCode: 200 });
-    } catch (error) {
-      console.error("Error updating product:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
+      res
+        .status(200)
+        .json({ message: "Product added successfully!", statusCode: 200 });
+    });
+  } catch (err) {
+    console.log("🚀 ~ createProduct ~ err:", err);
+  }
 };
 
-module.exports = { createProduct, getProduct, updateProduct };
+const foo = async (req, res) => {
+  try {
+    const { title, description, price, categoryId } = req.body;
+    console.log(title, description, price, categoryId);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+module.exports = { createProduct, getProduct, updateProduct, foo };
