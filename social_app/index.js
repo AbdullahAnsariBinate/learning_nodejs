@@ -1,11 +1,15 @@
+//Middlewares and libraries imports.
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
-const userRouter = require("./routers/users");
+
+//Routes Imports
 const authRouter = require("./routers/auth");
+const userRouter = require("./routers/users");
+const categoryRouter = require("./routers/category");
 
 dotenv.config();
 
@@ -29,6 +33,7 @@ app.use(morgan("common"));
 //Routes
 app.use("/socialapp/api/users", userRouter);
 app.use("/socialapp/api/auth", authRouter);
+app.use("/socialapp/api/category", categoryRouter);
 
 // app.get("/user", (req, res) => {
 //   res.send("Hello World!");
