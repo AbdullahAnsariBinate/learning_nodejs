@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
-
+const bodyParser = require("body-parser");
 //Routes Imports
 const authRouter = require("./routers/auth");
 const userRouter = require("./routers/users");
@@ -26,8 +26,9 @@ mongoose
   .catch((err) => {
     console.log(`Database not connected! Here is Error: ${err}`);
   });
-
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
@@ -42,6 +43,6 @@ app.use("/socialapp/api/product", productRouter);
 // });
 
 //Listen the app port
-app.listen(8200, () => {
-  console.log(`App is running on Port ${8200}`);
+app.listen(3000, () => {
+  console.log(`App is running on Port ${3000}`);
 });
