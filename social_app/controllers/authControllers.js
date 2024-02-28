@@ -13,6 +13,7 @@ const register = async (req, res) => {
       mobile: req.body.mobile,
       gender: req.body.gender,
       password: hashedPassword,
+      role: req.body.role,
     });
     await newUser.save();
     res.status(200).json(newUser);
@@ -43,11 +44,9 @@ const login = async (req, res) => {
       return;
     }
     user.token = "";
-    const accessToken = jwt.sign(
-      { user },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "9000000000h" }
-    );
+    const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "9000000000h",
+    });
     user.token = accessToken;
     await user.save();
     const updatedUser = await User.findOne({ emailId: req.body.emailId });

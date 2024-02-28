@@ -1,4 +1,3 @@
-const { json } = require("express");
 const Category = require("../modals/Category");
 const parser = require("../middleware/cloudinaryStorage");
 

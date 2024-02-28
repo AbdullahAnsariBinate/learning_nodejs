@@ -37,6 +37,7 @@ const createProduct = async (req, res) => {
     console.log("🚀 ~ createProduct ~ err:", err);
   }
 };
+//Get by id and get all
 const getProduct = async (req, res) => {
   try {
     const { id } = req.query;
@@ -114,7 +115,7 @@ const updateProduct = async (req, res) => {
       imgs.forEach((item, index) => {
         allImages.push(item?.path);
       });
-      console.log("allImages", allImages);
+      // console.log("allImages", allImages);
       const { title, description, price, categoryId } = req.body;
       const { id } = req.query;
 
@@ -140,13 +141,23 @@ const updateProduct = async (req, res) => {
   }
 };
 
-const foo = async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
-    const { title, description, price, categoryId } = req.body;
-    console.log(title, description, price, categoryId);
+    const { id } = req.params;
+    // let isId = await Product.findById(id);
+    let val = await Product.findByIdAndDelete(id);
+    if (val !== null) {
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "Product has been deleted!" });
+    } else
+      res
+        .status(404)
+        .json({ statusCode: false, message: "Product not found!" });
   } catch (err) {
-    console.log(err.message);
+    console.log("🚀 ~ deleteProduct ~ err:", err);
+    res.status(500).json({ statusCode: false, message: "Request failed!" });
   }
 };
 
-module.exports = { createProduct, getProduct, updateProduct, foo };
+module.exports = { createProduct, getProduct, updateProduct, deleteProduct };
